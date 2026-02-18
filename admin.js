@@ -1,5 +1,5 @@
 // STEP 1: Update this URL after you deploy to Render (e.g., https://your-site.onrender.com)
-const API_URL = "http://localhost:3000";
+const API_URL = "grievance-portal-production-ba82.up.railway.app";
 
 async function loadData() {
     try {
