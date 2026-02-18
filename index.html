@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Section Feedback</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Exam Section Feedback</h2>
+        <form id="feedbackForm">
+            <label for="staffType">Staff Member/Section:</label>
+            <select id="staffType" required>
+                <option value="">-- Select --</option>
+                <option value="MTS">MTS (Multi-Tasking Staff)</option>
+                <option value="Counter Clerk">Counter Clerk</option>
+                <option value="Superintendent">Superintendent</option>
+                <option value="Other">Other Staff</option>
+            </select>
+
+            <label>Rate Experience (1-5):</label>
+            <div class="rating-group">
+                <input type="radio" name="rate" value="1"> 1
+                <input type="radio" name="rate" value="2"> 2
+                <input type="radio" name="rate" value="3" checked> 3
+                <input type="radio" name="rate" value="4"> 4
+                <input type="radio" name="rate" value="5"> 5
+            </div>
+
+            <div class="misconduct-box">
+                <label style="color: #d9534f; font-weight: bold;">
+                    <input type="checkbox" id="misconduct"> Report Bribe or Misconduct
+                </label>
+            </div>
+
+            <label for="comments">Details:</label>
+            <textarea id="comments" rows="4" placeholder="Write your experience here..."></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
