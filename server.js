@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
@@ -8,49 +8,71 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const DATA_FILE = '/tmp/feedback.json';
+// --- MONGODB CONNECTION ---
+// Paste your string below and make sure to include your real password
+const MONGO_URI = "mongodb+srv://pranaykardekar_db_user:JkcCBhEiifG8ENpF@cluster0.mbtwteg.mongodb.net/?appName=Cluster0"; 
 
-const initFile = () => {
-    if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify([]));
-};
+mongoose.connect(MONGO_URI)
+    .then(() => console.log("✅ Database Connected Successfully"))
+    .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
-// SUBMIT
-app.post('/submit-feedback', (req, res) => {
-    initFile();
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    const ticketId = `EXAM-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
-    
-    const newEntry = { 
-        id: ticketId, 
-        timestamp: new Date().toLocaleString(), 
-        status: "Pending", 
-        ...req.body 
-    };
-
-    data.push(newEntry);
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-    res.status(200).send({ message: "Success", ticketId });
+// --- DATA MODEL ---
+const feedbackSchema = new mongoose.Schema({
+    id: String,
+    timestamp: String,
+    staff: String,
+    rating: Number,
+    isMisconduct: Boolean,
+    comments: String,
+    status: { type: String, default: "Pending" }
 });
 
-// GET ALL
-app.get('/all-feedback', (req, res) => {
-    initFile();
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    res.status(200).send(data);
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
+// --- ROUTES ---
+
+// 1. Submit Feedback
+app.post('/submit-feedback', async (req, res) => {
+    try {
+        const ticketId = `EXAM-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+        const newEntry = new Feedback({
+            id: ticketId,
+            timestamp: new Date().toLocaleString(),
+            ...req.body
+        });
+        await newEntry.save();
+        res.status(200).send({ message: "Success", ticketId });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: "Error saving to database" });
+    }
 });
 
-// UPDATE STATUS
-app.patch('/update-status/:id', (req, res) => {
-    initFile();
-    let data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    const index = data.findIndex(item => item.id === req.params.id);
-    
-    if (index !== -1) {
-        data[index].status = req.body.status;
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-        res.status(200).send({ message: "Status Updated" });
-    } else {
-        res.status(404).send({ message: "Not Found" });
+// 2. Get All Feedback (for Admin and Tracking)
+app.get('/all-feedback', async (req, res) => {
+    try {
+        const data = await Feedback.find().sort({ _id: -1 });
+        res.status(200).send(data);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// 3. Update Status (Resolve Button)
+app.patch('/update-status/:id', async (req, res) => {
+    try {
+        const result = await Feedback.findOneAndUpdate(
+            { id: req.params.id }, 
+            { status: req.body.status },
+            { new: true }
+        );
+        if (result) {
+            res.status(200).send({ message: "Status Updated" });
+        } else {
+            res.status(404).send({ message: "Ticket not found" });
+        }
+    } catch (err) {
+        res.status(500).send(err);
     }
 });
 
