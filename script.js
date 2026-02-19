@@ -1,5 +1,3 @@
-const API_URL = "";
-
 document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -11,17 +9,20 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
     };
 
     try {
-        const response = await fetch(`${API_URL}/submit-feedback`, {
+        const response = await fetch('/submit-feedback', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            alert("Feedback sent successfully.");
+            // Quirky success message
+            alert(`✅ Submission Successful!\n\nYour Ticket ID: ${result.ticketId}\n\nPlease save this ID to track your complaint status.`);
             this.reset();
         }
     } catch (err) {
-        alert("Could not connect to the server.");
+        alert("Server error. Please try again.");
     }
 });

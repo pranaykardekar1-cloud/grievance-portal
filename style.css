@@ -1,9 +1,214 @@
-body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
-.container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-h2 { color: #1a73e8; margin-bottom: 20px; text-align: center; }
-label { display: block; margin-top: 15px; font-weight: 600; }
-select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
-.rating-group { margin: 10px 0; }
-.misconduct-box { background: #fff5f5; padding: 10px; border: 1px dashed #ff8080; margin-top: 15px; }
-button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 16px; }
-button:hover { background: #1557b0; }
+/* Modern Quirky UI - Glassmorphism Theme */
+:root {
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.5);
+    --accent: #a855f7;
+    --danger: #ff4d4d;
+    --success: #22c55e;
+    --warning: #facc15;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: radial-gradient(circle at top left, #1e1b4b, #0f172a);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* Quirky Floating Glow */
+body::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: var(--primary);
+    filter: blur(120px);
+    border-radius: 50%;
+    z-index: -1;
+    top: 15%;
+    left: 10%;
+    opacity: 0.3;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    padding: 2.5rem;
+    border-radius: 28px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+label {
+    display: block;
+    margin: 20px 0 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Inputs & Selects */
+select, textarea, input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+select option { background: #1e1b4b; color: white; }
+
+select:focus, textarea:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* Advanced Star Rating */
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.rating input { display: none; }
+.rating label {
+    font-size: 36px;
+    color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0 4px;
+    padding: 0; /* Reset label margin */
+}
+
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input:checked ~ label {
+    color: var(--warning);
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+/* Misconduct Box */
+.misconduct-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 14px;
+    border-radius: 14px;
+    margin: 24px 0;
+    border: 1px dashed var(--danger);
+    transition: 0.3s;
+}
+
+.misconduct-box:hover {
+    background: rgba(255, 77, 77, 0.15);
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+}
+
+button:active { transform: scale(0.98); }
+
+/* Status Pills for Admin/Tracking */
+.status-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.status-pill.pending {
+    background: rgba(250, 204, 21, 0.15);
+    color: var(--warning);
+    border: 1px solid var(--warning);
+}
+
+.status-pill.resolved {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+/* Ticket ID Highlight */
+.ticket-display {
+    font-family: 'Courier New', Courier, monospace;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+}
+
+/* Track My Status Section (Optional) */
+.track-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+}
+
+.track-link {
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-decoration: none;
+    cursor: pointer;
+}

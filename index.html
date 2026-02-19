@@ -8,36 +8,40 @@
 </head>
 <body>
     <div class="container">
-        <h2>Exam Section Feedback</h2>
+        <h2>Exam Section Grievance ✨</h2>
         <form id="feedbackForm">
-            <label for="staffType">Staff Member/Section:</label>
+            <label for="staffType">Who are you reporting?</label>
             <select id="staffType" required>
-                <option value="">-- Select --</option>
-                <option value="MTS">MTS (Multi-Tasking Staff)</option>
-                <option value="Counter Clerk">Counter Clerk</option>
+                <option value="" disabled selected>-- Select Official --</option>
+                <option value="CoE">CoE (Controller of Examination)</option>
+                <option value="OSD">OSD (Officer on Special Duty)</option>
+                <option value="AR Exam">AR Exam (Assistant Registrar)</option>
                 <option value="Superintendent">Superintendent</option>
+                <option value="Counter Clerk">Counter Clerk</option>
+                <option value="MTS">MTS (Multi-Tasking Staff)</option>
                 <option value="Other">Other Staff</option>
             </select>
 
-            <label>Rate Experience (1-5):</label>
-            <div class="rating-group">
-                <input type="radio" name="rate" value="1"> 1
-                <input type="radio" name="rate" value="2"> 2
-                <input type="radio" name="rate" value="3" checked> 3
-                <input type="radio" name="rate" value="4"> 4
-                <input type="radio" name="rate" value="5"> 5
+            <label>Experience Rating</label>
+            <div class="rating">
+                <input type="radio" name="rate" id="star5" value="5"><label for="star5">★</label>
+                <input type="radio" name="rate" id="star4" value="4"><label for="star4">★</label>
+                <input type="radio" name="rate" id="star3" value="3" checked><label for="star3">★</label>
+                <input type="radio" name="rate" id="star2" value="2"><label for="star2">★</label>
+                <input type="radio" name="rate" id="star1" value="1"><label for="star1">★</label>
             </div>
 
             <div class="misconduct-box">
-                <label style="color: #d9534f; font-weight: bold;">
-                    <input type="checkbox" id="misconduct"> Report Bribe or Misconduct
+                <input type="checkbox" id="misconduct">
+                <label for="misconduct" style="color: #ff4d4d; font-weight: bold; margin: 0;">
+                    Report Bribe or Misconduct 🚨
                 </label>
             </div>
 
-            <label for="comments">Details:</label>
-            <textarea id="comments" rows="4" placeholder="Write your experience here..."></textarea>
+            <label for="comments">Specific Details</label>
+            <textarea id="comments" rows="4" placeholder="Tell us what happened..." required></textarea>
 
-            <button type="submit">Submit Feedback</button>
+            <button type="submit">Submit Feedback →</button>
         </form>
     </div>
     <script src="script.js"></script>
