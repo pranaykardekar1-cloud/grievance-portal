@@ -7,9 +7,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const DATA_FILE = '/tmp/feedback.json'; // Vercel allows writing to /tmp temporarily
+const DATA_FILE = '/tmp/feedback.json';
+// In a real app, this would be an environment variable
+const ADMIN_SECRET = "exam-controller-secure-key-2026"; 
 
-// Helper to read/write (This is temporary until we do MongoDB)
 const initFile = () => {
     if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify([]));
 };
@@ -17,7 +18,11 @@ const initFile = () => {
 app.post('/submit-feedback', (req, res) => {
     initFile();
     const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    const newEntry = { id: Date.now(), timestamp: new Date().toLocaleString(), ...req.body };
+    const newEntry = { 
+        id: crypto.randomUUID(), // Use secure unique IDs
+        timestamp: new Date().toLocaleString(), 
+        ...req.body 
+    };
     data.push(newEntry);
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
     res.status(200).send({ message: "Success" });
@@ -29,14 +34,25 @@ app.get('/all-feedback', (req, res) => {
     res.status(200).send(data);
 });
 
+// SECURE DELETE: Requires Authorization Header
 app.delete('/delete-feedback/:id', (req, res) => {
+    const authHeader = req.headers['authorization'];
+
+    if (authHeader !== ADMIN_SECRET) {
+        return res.status(403).send({ message: "Unauthorized: Invalid Admin Key" });
+    }
+
     initFile();
     let data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    data = data.filter(item => item.id !== parseInt(req.params.id));
+    const initialLength = data.length;
+    data = data.filter(item => item.id !== req.params.id);
+
+    if (data.length === initialLength) {
+        return res.status(404).send({ message: "Record not found" });
+    }
+
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-    res.status(200).send({ message: "Deleted" });
+    res.status(200).send({ message: "Deleted successfully" });
 });
 
-// IMPORTANT: Do NOT use app.listen() for Vercel. 
-// Just export the app.
 module.exports = app;

@@ -1,5 +1,4 @@
-// STEP 1: Update this URL after you deploy to Render (e.g., https://your-site.onrender.com)
-const API_URL = "https://grievance-portal-yourname.vercel.app";
+const API_URL = "https://your-vercel-link.vercel.app";
 
 document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -19,13 +18,10 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         });
 
         if (response.ok) {
-            alert(data.isMisconduct ? "🚨 Report Submitted. Administration notified." : "Feedback Submitted Successfully.");
+            alert("Feedback sent successfully.");
             this.reset();
-        } else {
-            alert("Submission failed. Try again.");
         }
     } catch (err) {
-        console.error("Error:", err);
-        alert("Cannot connect to server. Make sure the backend is running.");
+        alert("Could not connect to the server.");
     }
 });
