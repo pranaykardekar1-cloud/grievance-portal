@@ -1,4 +1,4 @@
-const API_URL = "https://your-vercel-link.vercel.app";
+const API_URL = "";
 
 document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
     e.preventDefault();

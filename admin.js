@@ -1,4 +1,4 @@
-const API_URL = "https://your-vercel-link.vercel.app";
+const API_URL = "";
 // This should match the ADMIN_SECRET in server.js
 const ADMIN_SECRET = "exam-controller-secure-key-2026"; 
 
