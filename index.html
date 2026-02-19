@@ -8,21 +8,21 @@
 </head>
 <body>
     <div class="container">
-        <h2>Exam Section Grievance ✨</h2>
+        <h2>Exam Section Feedback</h2>
+        <p class="subtitle">Your feedback helps us improve services.</p>
+        
         <form id="feedbackForm">
-            <label for="staffType">Who are you reporting?</label>
+            <label for="staffType">Select Staff/Counter</label>
             <select id="staffType" required>
-                <option value="" disabled selected>-- Select Official --</option>
-                <option value="CoE">CoE (Controller of Examination)</option>
-                <option value="OSD">OSD (Officer on Special Duty)</option>
-                <option value="AR Exam">AR Exam (Assistant Registrar)</option>
-                <option value="Superintendent">Superintendent</option>
+                <option value="" disabled selected>Select an option</option>
                 <option value="Counter Clerk">Counter Clerk</option>
                 <option value="MTS">MTS (Multi-Tasking Staff)</option>
-                <option value="Other">Other Staff</option>
+                <option value="Security/Gate">Security/Gate Staff</option>
+                <option value="Dispatch">Dispatch/Post Section</option>
+                <option value="Other">Other Office Staff</option>
             </select>
 
-            <label>Experience Rating</label>
+            <label>Rating</label>
             <div class="rating">
                 <input type="radio" name="rate" id="star5" value="5"><label for="star5">★</label>
                 <input type="radio" name="rate" id="star4" value="4"><label for="star4">★</label>
@@ -33,15 +33,14 @@
 
             <div class="misconduct-box">
                 <input type="checkbox" id="misconduct">
-                <label for="misconduct" style="color: #ff4d4d; font-weight: bold; margin: 0;">
-                    Report Bribe or Misconduct 🚨
-                </label>
+                <label for="misconduct">Report Bribe or Misconduct</label>
             </div>
 
-            <label for="comments">Specific Details</label>
-            <textarea id="comments" rows="4" placeholder="Tell us what happened..." required></textarea>
+            <label for="comments">Details</label>
+            <textarea id="comments" rows="3" placeholder="Describe your experience..." required></textarea>
 
-            <button type="submit">Submit Feedback →</button>
+            <button type="submit">Submit Feedback</button>
+            <p class="ticket-alert">Submissions are encrypted and anonymous.</p>
         </form>
     </div>
     <script src="script.js"></script>
