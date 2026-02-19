@@ -3,18 +3,24 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
+const path = require('path');
 
 const app = express();
+
+// --- MIDDLEWARE ---
 app.use(cors());
 app.use(bodyParser.json());
+// This line tells Express to serve your CSS and JS files automatically
+app.use(express.static(path.join(__dirname, './')));
 
 // --- MONGODB CONNECTION ---
-// Paste your string below and make sure to include your real password
+// IMPORTANT: Replace PASTE_YOUR_CONNECTION_STRING_HERE with your actual string
+// Ensure you replace <db_password> with your real database user password
 const MONGO_URI = "mongodb+srv://pranaykardekar_db_user:JkcCBhEiifG8ENpF@cluster0.mbtwteg.mongodb.net/?appName=Cluster0"; 
 
 mongoose.connect(MONGO_URI)
-    .then(() => console.log("✅ Database Connected Successfully"))
-    .catch(err => console.error("❌ MongoDB Connection Error:", err));
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch(err => console.error("❌ Connection Error:", err));
 
 // --- DATA MODEL ---
 const feedbackSchema = new mongoose.Schema({
@@ -31,7 +37,12 @@ const Feedback = mongoose.model('Feedback', feedbackSchema);
 
 // --- ROUTES ---
 
-// 1. Submit Feedback
+// serve index.html for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Submit Feedback
 app.post('/submit-feedback', async (req, res) => {
     try {
         const ticketId = `EXAM-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
@@ -43,12 +54,11 @@ app.post('/submit-feedback', async (req, res) => {
         await newEntry.save();
         res.status(200).send({ message: "Success", ticketId });
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Error saving to database" });
+        res.status(500).send({ message: "Error saving feedback" });
     }
 });
 
-// 2. Get All Feedback (for Admin and Tracking)
+// Get All Feedback
 app.get('/all-feedback', async (req, res) => {
     try {
         const data = await Feedback.find().sort({ _id: -1 });
@@ -58,19 +68,14 @@ app.get('/all-feedback', async (req, res) => {
     }
 });
 
-// 3. Update Status (Resolve Button)
+// Update Status
 app.patch('/update-status/:id', async (req, res) => {
     try {
-        const result = await Feedback.findOneAndUpdate(
+        await Feedback.findOneAndUpdate(
             { id: req.params.id }, 
-            { status: req.body.status },
-            { new: true }
+            { status: req.body.status }
         );
-        if (result) {
-            res.status(200).send({ message: "Status Updated" });
-        } else {
-            res.status(404).send({ message: "Ticket not found" });
-        }
+        res.status(200).send({ message: "Updated" });
     } catch (err) {
         res.status(500).send(err);
     }
