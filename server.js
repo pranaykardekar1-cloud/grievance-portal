@@ -10,16 +10,14 @@ const app = express();
 // --- MIDDLEWARE ---
 app.use(cors());
 app.use(bodyParser.json());
-// This line tells Express to serve your CSS and JS files automatically
 app.use(express.static(path.join(__dirname, './')));
 
 // --- MONGODB CONNECTION ---
-// IMPORTANT: Replace PASTE_YOUR_CONNECTION_STRING_HERE with your actual string
-// Ensure you replace <db_password> with your real database user password
+// Make sure to replace <db_password> with your actual password
 const MONGO_URI = "mongodb+srv://pranaykardekar_db_user:JkcCBhEiifG8ENpF@cluster0.mbtwteg.mongodb.net/?appName=Cluster0"; 
 
 mongoose.connect(MONGO_URI)
-    .then(() => console.log("✅ MongoDB Connected"))
+    .then(() => console.log("✅ Database Connected"))
     .catch(err => console.error("❌ Connection Error:", err));
 
 // --- DATA MODEL ---
@@ -35,12 +33,20 @@ const feedbackSchema = new mongoose.Schema({
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
-// --- ROUTES ---
+// --- HTML PAGE ROUTES ---
 
-// serve index.html for the root URL
+// Route for User Feedback Page (Home)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Route for Admin Tracking Page
+// This fixes the "Cannot GET /admin" error
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// --- API ROUTES ---
 
 // Submit Feedback
 app.post('/submit-feedback', async (req, res) => {

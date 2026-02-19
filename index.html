@@ -3,57 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam Section Feedback</title>
+    <title>GGU | Exam Section Grievance</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
-    <img src="https://www.ggu.ac.in/images/logo.png" alt="GGU Logo" class="ggu-logo">
-    </div>
-        <h2>Exam Section Feedback</h2>
-        <p class="subtitle">Your feedback helps us improve services.</p>
-        
-        <form id="feedbackForm">
-            <label for="staffType">Select Staff/Counter</label>
-            <select id="staffType" required>
-                <option value="" disabled selected>Select an option</option>
-                <option value="Counter Clerk">Counter Clerk</option>
-                <option value="MTS">MTS (Multi-Tasking Staff)</option>
-                <option value="Security/Gate">Security/Gate Staff</option>
-                <option value="Dispatch">Dispatch/Post Section</option>
-                <option value="Other">Other Office Staff</option>
-            </select>
+        <div class="brand-header">
+            <img src="https://www.ggu.ac.in/images/logo.png" alt="GGU Logo" class="ggu-logo">
+            <h2>GGU Exam Portal</h2>
+            <p class="university-name">Guru Ghasidas Vishwavidyalaya</p>
+        </div>
 
-            <label>Rating</label>
-            <div class="rating">
-                <input type="radio" name="rate" id="star5" value="5"><label for="star5">★</label>
-                <input type="radio" name="rate" id="star4" value="4"><label for="star4">★</label>
-                <input type="radio" name="rate" id="star3" value="3" checked><label for="star3">★</label>
-                <input type="radio" name="rate" id="star2" value="2"><label for="star2">★</label>
-                <input type="radio" name="rate" id="star1" value="1"><label for="star1">★</label>
+        <div class="form-content">
+            <p class="subtitle">Official Grievance & Feedback System</p>
+            
+            <form id="feedbackForm">
+                <label for="staffType">Select Department / Staff</label>
+                <select id="staffType" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Counter Clerk">Counter Clerk</option>
+                    <option value="MTS">MTS (Multi-Tasking Staff)</option>
+                    <option value="Security/Gate">Security/Gate Staff</option>
+                    <option value="Dispatch">Dispatch/Post Section</option>
+                    <option value="Other">Other Office Staff</option>
+                </select>
+
+                <label>Overall Experience Rating</label>
+                <div class="rating">
+                    <input type="radio" name="rate" id="star5" value="5"><label for="star5">★</label>
+                    <input type="radio" name="rate" id="star4" value="4"><label for="star4">★</label>
+                    <input type="radio" name="rate" id="star3" value="3" checked><label for="star3">★</label>
+                    <input type="radio" name="rate" id="star2" value="2"><label for="star2">★</label>
+                    <input type="radio" name="rate" id="star1" value="1"><label for="star1">★</label>
+                </div>
+
+                <div class="misconduct-box">
+                    <input type="checkbox" id="misconduct">
+                    <label for="misconduct">Report Bribe or Misconduct</label>
+                </div>
+
+                <label for="comments">Brief Description</label>
+                <textarea id="comments" rows="3" placeholder="Explain your concern here..." required></textarea>
+
+                <button type="submit">Submit Official Grievance</button>
+            </form>
+
+            <div class="track-section">
+                <label>Track Your Status</label>
+                <div class="track-controls">
+                    <input type="text" id="trackInput" placeholder="Enter Reference ID">
+                    <button type="button" id="trackBtn" class="track-btn-alt">Search Status</button>
+                </div>
+                <p id="statusResult"></p>
             </div>
-
-            <div class="misconduct-box">
-                <input type="checkbox" id="misconduct">
-                <label for="misconduct">Report Bribe or Misconduct</label>
-            </div>
-
-            <label for="comments">Details</label>
-            <textarea id="comments" rows="3" placeholder="Describe your experience..." required></textarea>
-
-            <button type="submit">Submit Feedback</button>
-        </form>
-
-        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #e2e8f0;">
-
-        <div class="track-section">
-            <label>Track your grievance</label>
-            <div style="display: flex; gap: 10px; margin-top: 8px;">
-                <input type="text" id="trackInput" placeholder="Enter ID (e.g. EXAM-A1B2)">
-                <button id="trackBtn" style="width: auto; padding: 0 15px; font-size: 0.9rem;">Track</button>
-            </div>
-            <p id="statusResult" style="margin-top: 15px; font-weight: bold; display: none; text-align: center;"></p>
         </div>
     </div>
     <script src="script.js"></script>
