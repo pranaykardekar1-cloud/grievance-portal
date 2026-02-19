@@ -40,8 +40,18 @@
             <textarea id="comments" rows="3" placeholder="Describe your experience..." required></textarea>
 
             <button type="submit">Submit Feedback</button>
-            <p class="ticket-alert">Submissions are encrypted and anonymous.</p>
         </form>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <div class="track-section">
+            <label>Track your grievance</label>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                <input type="text" id="trackInput" placeholder="Enter ID (e.g. EXAM-A1B2)">
+                <button id="trackBtn" style="width: auto; padding: 0 15px; font-size: 0.9rem;">Track</button>
+            </div>
+            <p id="statusResult" style="margin-top: 15px; font-weight: bold; display: none; text-align: center;"></p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

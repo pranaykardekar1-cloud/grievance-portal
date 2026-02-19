@@ -1,3 +1,6 @@
+const API_URL = ""; // Relative URL for Vercel
+
+// SUBMIT FEEDBACK
 document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -9,7 +12,7 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
     };
 
     try {
-        const response = await fetch('/submit-feedback', {
+        const response = await fetch(`${API_URL}/submit-feedback`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -18,11 +21,34 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         const result = await response.json();
 
         if (response.ok) {
-            // Quirky success message
-            alert(`✅ Submission Successful!\n\nYour Ticket ID: ${result.ticketId}\n\nPlease save this ID to track your complaint status.`);
+            alert(`✅ Submitted!\n\nYour Ticket ID: ${result.ticketId}\nSave this to track status.`);
             this.reset();
         }
     } catch (err) {
-        alert("Server error. Please try again.");
+        alert("Submission failed. Check connection.");
+    }
+});
+
+// TRACK STATUS
+document.getElementById('trackBtn').addEventListener('click', async () => {
+    const id = document.getElementById('trackInput').value.trim().toUpperCase();
+    const resultDisplay = document.getElementById('statusResult');
+
+    if (!id) return;
+
+    try {
+        const response = await fetch(`${API_URL}/all-feedback`);
+        const data = await response.json();
+        const ticket = data.find(t => t.id === id);
+
+        resultDisplay.style.display = "block";
+        if (ticket) {
+            const color = ticket.status === 'Resolved' ? '#22c55e' : '#f59e0b';
+            resultDisplay.innerHTML = `Ticket ${id}: <span style="color: ${color}">${ticket.status}</span>`;
+        } else {
+            resultDisplay.innerHTML = `<span style="color: #ef4444">ID not found.</span>`;
+        }
+    } catch (err) {
+        console.error(err);
     }
 });

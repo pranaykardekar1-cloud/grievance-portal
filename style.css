@@ -1,142 +1,54 @@
-:root {
-    --primary: #2563eb;
-    --bg-light: #f8fafc;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --star-gold: #febd69; /* Amazon Star Gold */
-    --star-gray: #e2e8f0;
-}
+const API_URL = ""; // Relative URL for Vercel
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-main);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
+// SUBMIT FEEDBACK
+document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-.container {
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 440px;
-    padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border);
-}
+    const data = {
+        staff: document.getElementById('staffType').value,
+        rating: document.querySelector('input[name="rate"]:checked').value,
+        isMisconduct: document.getElementById('misconduct').checked,
+        comments: document.getElementById('comments').value
+    };
 
-h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #0f172a;
-    text-align: center;
-}
+    try {
+        const response = await fetch(`${API_URL}/submit-feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-p.subtitle {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-}
+        const result = await response.json();
 
-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-main);
-}
+        if (response.ok) {
+            alert(`✅ Submitted!\n\nYour Ticket ID: ${result.ticketId}\nSave this to track status.`);
+            this.reset();
+        }
+    } catch (err) {
+        alert("Submission failed. Check connection.");
+    }
+});
 
-select, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 1rem;
-    background: #fff;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+// TRACK STATUS
+document.getElementById('trackBtn').addEventListener('click', async () => {
+    const id = document.getElementById('trackInput').value.trim().toUpperCase();
+    const resultDisplay = document.getElementById('statusResult');
 
-select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
+    if (!id) return;
 
-/* Amazon Style Star Rating */
-.rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    margin: 10px 0 20px;
-}
+    try {
+        const response = await fetch(`${API_URL}/all-feedback`);
+        const data = await response.json();
+        const ticket = data.find(t => t.id === id);
 
-.rating input { display: none; }
-
-.rating label {
-    font-size: 32px;
-    color: var(--star-gray);
-    cursor: pointer;
-    transition: color 0.1s;
-    margin-right: 5px;
-}
-
-.rating label:hover,
-.rating label:hover ~ label,
-.rating input:checked ~ label {
-    color: var(--star-gold);
-}
-
-/* Misconduct Box */
-.misconduct-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    background: #fff1f2;
-    border: 1px solid #fecdd3;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.misconduct-box input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.misconduct-box label {
-    margin-bottom: 0;
-    color: #be123c;
-    cursor: pointer;
-}
-
-button {
-    width: 100%;
-    background: #131921; /* Clean Dark Profile */
-    color: white;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-button:hover {
-    background: #232f3e;
-}
-
-.ticket-alert {
-    margin-top: 15px;
-    font-size: 0.8rem;
-    text-align: center;
-    color: var(--text-muted);
-}
+        resultDisplay.style.display = "block";
+        if (ticket) {
+            const color = ticket.status === 'Resolved' ? '#22c55e' : '#f59e0b';
+            resultDisplay.innerHTML = `Ticket ${id}: <span style="color: ${color}">${ticket.status}</span>`;
+        } else {
+            resultDisplay.innerHTML = `<span style="color: #ef4444">ID not found.</span>`;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
