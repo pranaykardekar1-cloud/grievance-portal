@@ -7,20 +7,20 @@ const path = require('path');
 
 const app = express();
 
-// --- MIDDLEWARE ---
+// --- 1. MIDDLEWARE (Order Matters!) ---
 app.use(cors());
 app.use(bodyParser.json());
+// This line allows the browser to grab style.css, logo.png, and script.js automatically
 app.use(express.static(path.join(__dirname, './')));
 
-// --- MONGODB CONNECTION ---
-// Make sure to replace <db_password> with your actual password
+// --- 2. MONGODB CONNECTION ---
 const MONGO_URI = "mongodb+srv://pranaykardekar_db_user:JkcCBhEiifG8ENpF@cluster0.mbtwteg.mongodb.net/?appName=Cluster0"; 
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("✅ Database Connected"))
     .catch(err => console.error("❌ Connection Error:", err));
 
-// --- DATA MODEL ---
+// --- 3. DATA MODEL ---
 const feedbackSchema = new mongoose.Schema({
     id: String,
     timestamp: String,
@@ -33,20 +33,19 @@ const feedbackSchema = new mongoose.Schema({
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
-// --- HTML PAGE ROUTES ---
+// --- 4. HTML PAGE ROUTES ---
 
-// Route for User Feedback Page (Home)
+// Main User Page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Route for Admin Tracking Page
-// This fixes the "Cannot GET /admin" error
+// Admin Page
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// --- API ROUTES ---
+// --- 5. API ROUTES ---
 
 // Submit Feedback
 app.post('/submit-feedback', async (req, res) => {
@@ -64,7 +63,7 @@ app.post('/submit-feedback', async (req, res) => {
     }
 });
 
-// Get All Feedback
+// Get All Feedback (For Admin)
 app.get('/all-feedback', async (req, res) => {
     try {
         const data = await Feedback.find().sort({ _id: -1 });
@@ -74,7 +73,7 @@ app.get('/all-feedback', async (req, res) => {
     }
 });
 
-// Update Status
+// Update Status (For Admin)
 app.patch('/update-status/:id', async (req, res) => {
     try {
         await Feedback.findOneAndUpdate(
@@ -85,6 +84,12 @@ app.patch('/update-status/:id', async (req, res) => {
     } catch (err) {
         res.status(500).send(err);
     }
+});
+
+// --- 6. START SERVER (Required for Local Testing) ---
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
 module.exports = app;

@@ -4,9 +4,6 @@
     { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/style.css", "dest": "/style.css" },
-    { "src": "/logo.png", "dest": "/logo.png" },
-    { "src": "/script.js", "dest": "/script.js" },
     { "src": "/(.*)", "dest": "server.js" }
   ]
 }
