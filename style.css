@@ -3,6 +3,7 @@
 :root {
     --ggu-blue: #002147;
     --ggu-gold: #D4AF37;
+    --ggu-gold-bright: #F4D03F;
     --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,21 +41,33 @@ body {
     padding: 10px;
     border-radius: 50%;
     margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.brand-header h2 { color: white; font-size: 1.4rem; text-transform: uppercase; }
+.brand-header h2 { 
+    color: white; 
+    font-size: 1.4rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
 
-.university-name { color: #F4D03F; font-size: 0.75rem; font-weight: 600; }
+.university-name { 
+    color: var(--ggu-gold-bright); 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    margin-top: 5px;
+}
 
 .form-content { padding: 30px; }
 
 label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--ggu-blue);
     margin-top: 20px;
     margin-bottom: 8px;
+    text-align: center;
 }
 
 select, textarea, input[type="text"] {
@@ -64,6 +77,15 @@ select, textarea, input[type="text"] {
     border: 2px solid transparent;
     border-radius: 12px;
     text-align: center;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+select:focus, textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--ggu-gold);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 button {
@@ -74,12 +96,42 @@ button {
     border: none;
     border-radius: 12px;
     font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 25px;
+    transition: transform 0.1s, background 0.2s;
 }
 
-/* Star Rating */
-.rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 10px; }
+button:hover {
+    background: #003366;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Fix for Star Rating Logic */
+.rating { 
+    display: flex; 
+    flex-direction: row-reverse; 
+    justify-content: center; 
+    gap: 8px; 
+    margin-top: 5px;
+}
+
 .rating input { display: none; }
-.rating label { font-size: 32px; color: #cbd5e1; cursor: pointer; }
-.rating input:checked ~ label { color: var(--ggu-gold); }
+
+.rating label { 
+    font-size: 36px; 
+    color: #cbd5e1; 
+    cursor: pointer; 
+    transition: color 0.2s;
+}
+
+/* This makes stars light up on hover and when clicked */
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input:checked ~ label { 
+    color: var(--ggu-gold); 
+}
